@@ -208,7 +208,7 @@ var padimpexp = (function()
       $("#importform").attr('action', pad_root_url + "/import");
       
       //hide stuff thats not avaible if abiword is disabled
-      if(clientVars.abiwordAvailable == "no")
+      if(clientVars.abiwordAvailable == "no" and clientVars.pandocAvailable == "no")
       {
         $("#exportworda").remove();
         $("#exportpdfa").remove();
@@ -216,7 +216,7 @@ var padimpexp = (function()
 
         $("#importmessageabiword").show();
       }
-      else if(clientVars.abiwordAvailable == "withoutPDF")
+        else if(clientVars.abiwordAvailable == "withoutPDF" or (clientVars.abiwordAvailable == "no" and clientVars.pandocAvailable == "yes"))
       {
         $("#exportpdfa").remove();
         

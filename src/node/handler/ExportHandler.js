@@ -34,6 +34,10 @@ var TidyHtml = require('../utils/TidyHtml');
 if(settings.abiword != null)
   var abiword = require("../utils/Abiword");
 
+//load pandoc only if its enabled
+if(settings.pandoc != null)
+  var pandoc = require("../utils/Pandoc");
+
 var tempDirectory = "/tmp";
 
 //tempDirectory changes if the operating system is windows
@@ -92,6 +96,16 @@ exports.doExport = function(req, res, padId, type)
             res.send(txt);
             callback("stop");
           },
+          //send the convert job to pandoc
+          function(callback)
+          {
+            //ensure html can be collected by the garbage collector
+            txt = null;
+
+            destFile = tempDirectory + "/etherpad_export_" + randNum + "." + type;
+            pandoc.convertFile(srcFile, destFile, type, callback);
+          },
+
           //send the convert job to abiword
           function(callback)
           {
@@ -182,7 +196,12 @@ exports.doExport = function(req, res, padId, type)
 
             TidyHtml.tidy(srcFile, callback);
           },
-
+          //send the convert job to pandoc
+          function(callback)
+          {
+            destFile = tempDirectory + "/etherpad_export_" + randNum + "." + type;
+            pandoc.convertFile(srcFile, destFile, type, callback);
+          },
           //send the convert job to abiword
           function(callback)
           {

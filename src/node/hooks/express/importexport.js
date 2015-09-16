@@ -17,6 +17,10 @@ exports.expressCreateServer = function (hook_name, args, cb) {
        ["odt", "pdf", "doc"].indexOf(req.params.type) !== -1) {
       res.send("Abiword is not enabled at this Etherpad instance. Set the path to Abiword in settings.json to enable this feature");
       return;
+    } else if (settings.pandoc == null &&
+       ["odt", "pdf", "doc"].indexOf(req.params.type) !== -1) {
+      res.send("Pandoc is not enabled at this Etherpad instance. Set the path to Pandoc in settings.json to enable this feature");
+      return;
     }
 
     res.header("Access-Control-Allow-Origin", "*");
